@@ -1,39 +1,77 @@
 $(document).ready(function(){
-	$('#boop').html(`<h1>BOOYEAH! I LOADED</h1>`);
-
+//i got vars out me arse:
 	let score = 0;
-	let cardNumber = 1;//0 because index and not ordinal number
-	const questionCard =[{
-		question: "Is this a question?",
-		options: ["one", "two", "three", "four"],
-		answerIdx: 0,
-		themeImg: "http://static.donquijote.org/images/tops/600/numbers.jpg"
-	},
-	{
-		question: "Is this another question",
-		options: ["aye", "bee", "cee", "dee"],
-		answerIdx: 1,
-		themeImg: "https://i.pinimg.com/originals/36/d9/4a/36d94af52287c56bdaf963709204ef86.jpg"
-	}];
+	let cardNumber = 0;//0 because index and not ordinal number
+
+	// Variable showImage will hold the setInterval when we start the slideshow
+	// var showImage; give it a name so i can stop it.
+	let showQuestion;
+
+	const questions = [
+	["What is the capital of France?", "Madrid", "Paris", "Detroit", "China", "B"],
+	["What is a group of crows called?", "Murder", "Clique", "Britches", "Ruby", "A"],
+	["What type of hound is a saluki?", "Blood", "Sweat", "Tears", "Sight", "D"],
+	["What is our instructor's GitHub handle?", "Tank Engine", "Schmomas", "Mr. T", "HumbleDev", "D"],
+	["Who let the dogs out?", "You", "I", "Who?", "They're not out yet", "C"]
+	]
+
+	//events
+	// $("#start").on("click", function(){
+	// 	// console.log("START button booped");
+	// 	startQuiz();
+	// });
+	// 	$("#stop").on("click", function(){
+	// 	// console.log("STOP button booped");
+	// 	stopQuiz();
+	// });
+	$("#start").click(startQuiz);
+	$("#stop").click(stopQuiz);
+		// $("#start").on("click", startQuiz);
+		// $("#stop").on("click", stopQuiz);
 
 //just make one. you'll call this in the timeout. it'll show for the length of time on the timer
-//the card will determined by the idx/count/cardNumber of array
+//the card will determined by the idx/count/cardNumber of array 				<img src="${questions[0].themeImg}" alt="dummytext">
 	function renderCard(){
 		$('#cardHolder').html(`
 			<div>
-				<h1>${questionCard[cardNumber].question}</h1>
-				<img src="${questionCard[cardNumber].themeImg}" alt="dummytext">
+				<h1>${questions[cardNumber][0]}</h1>
 				<ul>
-					<li>${questionCard[cardNumber].options[0]}</li>
-					<li>${questionCard[cardNumber].options[1]}</li>
-					<li>${questionCard[cardNumber].options[2]}</li>
-					<li>${questionCard[cardNumber].options[3]}</li>
+					<li>${questions[cardNumber][1]}</li>
+					<li>${questions[cardNumber][2]}</li>
+					<li>${questions[cardNumber][3]}</li>
+					<li>${questions[cardNumber][4]}</li>
 				</ul>
 			</div>
 		`)
 	}
-	renderCard();
+	
+// renderCard();
+	function nextQuestion(){
+		//get the next card in the array:
+		cardNumber++;
 
+		//show that card for a set length of time THIS IS THE TIMEOUT
+		// setTimeout(renderCard, 500);
+		if (cardNumber === questions.length) {
+			stopQuiz();//to stop the madness
+    	$('#cardHolder').html(`<div>
+				<h1>Finished!</h1>
+				<p>Your score is here, soon.</p>
+			</div>`);
+  	}
+	}
+
+	// the rotation
+	function startQuiz(){
+		// console.log("startQuiz fired");
+		showQuestion = setInterval(nextQuestion, 3000)
+	}
+
+	function stopQuiz(){
+		// console.log("stopQuiz fired");
+		clearInterval(showQuestion);
+	}
+// startQuiz();
 //like the slide show inclass work
 //so we need array of something to show. array of objs?
 
@@ -46,7 +84,9 @@ $(document).ready(function(){
 		//if at the end, you're done. total?
 
 
-
+//events
+//onkeyup, store that as an answer and then compare
+//reset as button at the end of the game
 	
 
 	//vars needed. 
