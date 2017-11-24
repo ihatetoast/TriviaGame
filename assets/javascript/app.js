@@ -2,17 +2,45 @@ $(document).ready(function(){
 //i got vars out me arse:
 	let score = 0;
 	let cardNumber;//0 because index and not ordinal number
+	// let userAnswer; //will be determined by data-key on click. maybe also keycode?
+
 
 	// Variable showImage will hold the setInterval when we start the slideshow
 	// var showImage; give it a name so i can stop it.
 	let quizTimer;
 
+/*Array todo: build out to 100. comment out all but 10 at first
+set cardnumber to be an array with random numbers from 0 to the array length minus 10
+so that the test taker gets 10 random ones. 
+until you figure that out, though, stick with 10.
+OOOOOOOOOORRRR shuffle the array before each quiz.
+*/
 	const questions = [
-	["What is the capital of France?", "Madrid", "Paris", "Detroit", "China", "B"],
-	["What is a group of crows called?", "Murder", "Clique", "Britches", "Ruby", "A"],
-	["What type of hound is a saluki?", "Blood", "Sweat", "Tears", "Sight", "D"],
-	["What is our instructor's GitHub handle?", "Tank Engine", "Schmomas", "Mr. T", "HumbleDev", "D"],
-	["Who let the dogs out?", "You", "I", "Who?", "They're not out yet", "C"]
+	["crows", "Murder", "Clique", "Britches", "Ruby", "A"],
+	["elephants", "Circus", "Fantastic", "Parade", "Pride", "C"],
+	["hippopotamuses", "Bloat", "Belch", "Belly", "Band", "A"],
+	["squids", "Schloop", "Pod", "Crowd", "Audience", "D"],
+	["toads", "Wart", "Knot", "Coven", "Clever", "B"],
+	["rhinoceroses", "Flash", "Smash", "Crash", "Rash", "C"],
+	["buffaloes", "Obstinacy", "Stubborn", "Rudeness", "Sass", "A"],
+	["sharks", "Shriek", "Fright", "Nervous titter", "Shiver", "D"],
+	["starlings", "Quiverescence", "Flickeration", "Palpatation", "Murmuration", "D"],
+	["lobsters", "Snipping", "Redness", "Risk", "Caution", "C"]
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+
+	
 	]
 
 	/*events (HEY, TAs! I TRIED A FEW VERSIONS AND THEY ALL WORK. OTHER 
@@ -35,42 +63,56 @@ $(document).ready(function(){
 	function renderCard(idx){
 		$('#cardHolder').html(`
 			<div>
-				<h1>${questions[idx][0]}</h1>
+				<h1>What is a group of <span class='animalName'>${questions[idx][0]}</span> called?</h1>
 				<ul>
-					<li>${questions[idx][1]}</li>
-					<li>${questions[idx][2]}</li>
-					<li>${questions[idx][3]}</li>
-					<li>${questions[idx][4]}</li>
+					<li><div class="choiceBtn" data-key="A">A. ${questions[idx][1]}</div></li>
+					<li><div class="choiceBtn" data-key="B">B. ${questions[idx][2]}</div></li>
+				</ul>
+				<ul>
+					<li><div class="choiceBtn" data-key="C">C. ${questions[idx][3]}</div></li>
+					<li><div class="choiceBtn" data-key="D">D. ${questions[idx][4]}</div></li>
 				</ul>
 				<p>Question <span>${idx + 1}</span> of <span>${questions.length}</span></p>
 			</div>
 		`)
 	}
 
-	// function nextQuestion(){
-	// 	//show that card for a set length of time THIS IS THE TIMEOUT
-	// 	 setTimeout(askQuestions, 200);
-	// 			//get the next card in the array:
-					
-	// }
-
-
-
+let correctAnswer;
+let userAnswer;
 //else stop
 //struggled with stopping the interval. found fix with the google-fus. 
-//if the index exists, do sthg. 
+
+
+//function to ask all the questions
 	const askQuestions = function(idx) {
+	//if the index exists, render the question and reassign answer 
 		if(questions[idx]){
-			console.log(questions[idx]);
 			renderCard(idx)
-			quizTimer = setTimeout(()=>{
-				askQuestions(idx + 1);
-			}, 1000);
+			correctAnswer = questions[idx][5];
 		}
 		else {
 			console.log("Quiz is finished");
 		}
+		quizTimer = setTimeout(()=>{
+				askQuestions(idx + 1);
+			}, 5000);	
 	}
+
+	$("#cardHolder").on("click", ".choiceBtn", function(){
+		userAnswer = this.dataset.key;
+		console.log(`user's answer is ${userAnswer}`);
+		console.log(`Correct answer is ${correctAnswer}`);
+		checkAnswer(correctAnswer, userAnswer);
+	});
+
+function checkAnswer(actual, guess){
+	if(actual == guess){
+		score++;
+		console.log(`user is right. score is now ${score} out of 10`);
+	} else {
+		console.log(`user is wrong score is still ${score} out of 10`);
+	}
+}
 
 
 	function startQuiz(){
@@ -100,15 +142,17 @@ $(document).ready(function(){
 //events
 //onkeyup, store that as an answer and then compare
 //reset as button at the end of the game
-	
+//onclick with dynamically loaded elems
+	// As of jQuery 1.7 you should use jQuery.fn.on:
+	// $(staticAncestors).on(eventName, dynamicChild, function() {});
+
+
 
 	//vars needed. 
 	//object that stores topics questions answers (r and w)
 	//current question 
 	//scores: right and wrong
-	//interval timer and timeout timer
-
-	//notes on questions. let be array of objects. 
+	//interval timer and/or timeout timer
 
 	// NOTES ON INTERVAL AND TIMEOUT USAGE:
 	// interval is ongoing. use this for the display of card/questions. it's on repeat.
@@ -122,7 +166,8 @@ the other shows as in displays. use give/ask in interval because I am asking ove
 
 
 	
-
+				// console.log(typeof userAnswer); //string
+				// console.log(typeof correctAnswer);//
 
 
 

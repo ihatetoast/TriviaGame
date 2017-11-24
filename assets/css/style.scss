@@ -1,3 +1,35 @@
 // notes on buttons
 // change color for hover and cursor to pointer
 // focus third color or maybe outline changes
+
+//variables
+$grey: #B3B1C9;
+$white: #E1DFFF;
+
+@mixin roundButton($w, $h, $color){
+	width: $w;
+	height: $h;
+	background-color: $color;
+	border-radius: 50%;
+	line-height: $h;
+	text-align: center;
+}
+
+body {
+	background-color: $grey;
+}
+
+li {
+	display: inline-block;
+	list-style: none;
+}
+
+#cardHolder {
+	background-color: $white;
+}
+
+.choiceBtn {
+	@include roundButton(5em, 5em, #8d46b0);
+	color: white;
+	font-size: 1.5em;
+}
