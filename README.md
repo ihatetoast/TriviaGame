@@ -2,11 +2,10 @@
 
 To Do:
 (__) make the card with the id slots for question and possible answers
-(__) create an object of questions/answers (perhaps by topic)
-(__) fill "card" of the question and possible answers
-(__) card loads right answer in different place every time (?)
-(__) card fills remaining spaces with wrong answers
-(__) load cards to DOM in intervals and let them stay up a certain length of time
+(__) create an array of arrays. or obj.
+(_X_) fill "card" of the question and possible answers
+~~(__) card loads right answer in different place every time (?)~~
+(_X_) load cards to DOM in intervals and let them stay up a certain length of time
 (__) only allow one answer. onclick or abcd and onkeyup
 (__) submit triggers right or wrong answer response
 (__) right answer responses show a huzzah card for a short time. 

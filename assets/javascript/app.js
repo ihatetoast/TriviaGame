@@ -1,11 +1,11 @@
 $(document).ready(function(){
 //i got vars out me arse:
 	let score = 0;
-	let cardNumber = 0;//0 because index and not ordinal number
+	let cardNumber;//0 because index and not ordinal number
 
 	// Variable showImage will hold the setInterval when we start the slideshow
 	// var showImage; give it a name so i can stop it.
-	let showQuestion;
+	let quizTimer;
 
 	const questions = [
 	["What is the capital of France?", "Madrid", "Paris", "Detroit", "China", "B"],
@@ -15,7 +15,8 @@ $(document).ready(function(){
 	["Who let the dogs out?", "You", "I", "Who?", "They're not out yet", "C"]
 	]
 
-	//events
+	/*events (HEY, TAs! I TRIED A FEW VERSIONS AND THEY ALL WORK. OTHER 
+	THAN ONE BEING BULKY, IS THERE REALLY A PREFERENCE?)*/
 	// $("#start").on("click", function(){
 	// 	// console.log("START button booped");
 	// 	startQuiz();
@@ -24,54 +25,66 @@ $(document).ready(function(){
 	// 	// console.log("STOP button booped");
 	// 	stopQuiz();
 	// });
-	$("#start").click(startQuiz);
-	$("#stop").click(stopQuiz);
+	$("#start").click(startQuiz);//works. am happy
+	$("#stop").click(stopQuiz);// works. am happy
 		// $("#start").on("click", startQuiz);
 		// $("#stop").on("click", stopQuiz);
 
 //just make one. you'll call this in the timeout. it'll show for the length of time on the timer
 //the card will determined by the idx/count/cardNumber of array 				<img src="${questions[0].themeImg}" alt="dummytext">
-	function renderCard(){
+	function renderCard(idx){
 		$('#cardHolder').html(`
 			<div>
-				<h1>${questions[cardNumber][0]}</h1>
+				<h1>${questions[idx][0]}</h1>
 				<ul>
-					<li>${questions[cardNumber][1]}</li>
-					<li>${questions[cardNumber][2]}</li>
-					<li>${questions[cardNumber][3]}</li>
-					<li>${questions[cardNumber][4]}</li>
+					<li>${questions[idx][1]}</li>
+					<li>${questions[idx][2]}</li>
+					<li>${questions[idx][3]}</li>
+					<li>${questions[idx][4]}</li>
 				</ul>
+				<p>Question <span>${idx + 1}</span> of <span>${questions.length}</span></p>
 			</div>
 		`)
 	}
-	
-// renderCard();
-	function nextQuestion(){
-		//get the next card in the array:
-		cardNumber++;
 
-		//show that card for a set length of time THIS IS THE TIMEOUT
-		// setTimeout(renderCard, 500);
-		if (cardNumber === questions.length) {
-			stopQuiz();//to stop the madness
-    	$('#cardHolder').html(`<div>
-				<h1>Finished!</h1>
-				<p>Your score is here, soon.</p>
-			</div>`);
-  	}
+	// function nextQuestion(){
+	// 	//show that card for a set length of time THIS IS THE TIMEOUT
+	// 	 setTimeout(askQuestions, 200);
+	// 			//get the next card in the array:
+					
+	// }
+
+
+
+//else stop
+//struggled with stopping the interval. found fix with the google-fus. 
+//if the index exists, do sthg. 
+	const askQuestions = function(idx) {
+		if(questions[idx]){
+			console.log(questions[idx]);
+			renderCard(idx)
+			quizTimer = setTimeout(()=>{
+				askQuestions(idx + 1);
+			}, 1000);
+		}
+		else {
+			console.log("Quiz is finished");
+		}
 	}
 
-	// the rotation
+
 	function startQuiz(){
-		// console.log("startQuiz fired");
-		showQuestion = setInterval(nextQuestion, 3000)
+		cardNumber = 0;
+		console.log("quiz started");
+		askQuestions(cardNumber);
 	}
 
 	function stopQuiz(){
-		// console.log("stopQuiz fired");
-		clearInterval(showQuestion);
+		console.log("stopQuiz fired");
+		clearTimeout(quizTimer);
+		
 	}
-// startQuiz();
+
 //like the slide show inclass work
 //so we need array of something to show. array of objs?
 
