@@ -1,26 +1,51 @@
+* {
+  box-sizing: border-box;
+  color: #45415A; }
+
+html,
 body {
-  background-color: #B3B1C9; }
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  /* The html and body elements cannot have any padding or margin. */ }
+
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -30px;
+  /* Pad bottom by footer height */
+  padding: 0 0 30px; }
+
+body {
+  background-color: #F6E6DA; }
 
 li {
   display: inline-block;
   list-style: none; }
 
 aside {
-  border: 1px solid aqua; }
+  background-color: #FEFEFD;
+  border: 1px solid black; }
 
 section {
-  border: 1px solid sienna; }
+  border: 1px solid black; }
 
 header {
-  border: 1px solid red; }
+  background-color: #6ED4D3;
+  border: 1px solid black; }
   header h1 {
     font-size: 1.2em; }
 
 footer {
-  border: 1px solid green; }
+  background-color: #93d2d0;
+  width: 100%;
+  height: 30px; }
+  footer p {
+    padding-top: 0.5em; }
 
 #cardHolder {
-  background-color: #E1DFFF; }
+  background-color: #FEFEFD; }
 
 .asideH2 {
   font-size: 1.2em; }
@@ -28,12 +53,20 @@ footer {
 .choiceBtn {
   width: 5em;
   height: 5em;
-  background-color: #8d46b0;
   border-radius: 50%;
   text-align: center;
+  background-color: #F19997;
   color: white;
   display: inline-block;
   font-size: 1em;
   padding-top: 1.5em; }
+  .choiceBtn:hover {
+    background-color: #F5738D; }
+
+#start {
+  background-color: #FFDB65;
+  color: #6ED4D3;
+  border: 2px solid #45415A;
+  border-radius: 5px; }
 
 /*# sourceMappingURL=style.css.map */

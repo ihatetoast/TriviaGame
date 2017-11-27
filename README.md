@@ -12,9 +12,9 @@ To Do (logic):
 * (_X_) timing out triggers time's up / wrong answer response
 * (_X_) wrong answer response and time out response shows correct answer and * moves on
 * (_X_) next card appears (as in new question and answers loaded)
-* (__) game over when last card appears
-* (__) total tally shown. 
-* (__) restart if user presses restart game. 
+* (_X_) game over when last card appears
+* (_X_) total tally shown. 
+* (_X_) restart if user presses restart game. 
 * (__) audio very last
 
 ---

@@ -38,39 +38,53 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 		species: "squids",
 		options: ["Schloop", "Pod", "Crowd", "Audience"],
 		ansPos: 3
-	}//,
-	// {
-	// 	species: "toads", 
-	// 	options: ["Wart", "Knot", "Coven", "Clever"],
-	// 	ansPos: 1
-	// },
-	// {
-	// 	species: "rhinoceroses", 
-	// 	options: ["Flash", "Smash", "Crash", "Rash"],
-	// 	ansPos: 2
-	// },
-	// {
-	// 	species: "buffaloes", 
-	// 	options: ["Obstinacy", "Stubborn", "Rudeness", "Sass"],
-	// 	ansPos: 0
-	// },
-	// {
-	// 	species: "sharks", 
-	// 	options: ["Shriek", "Fright", "Nervous titter", "Shiver"],
-	// 	ansPos: 3
-	// },
-	// {
-	// 	species: "starlings", 
-	// 	options: ["Quiverescence", "Flickeration", "Palpatation", "Murmuration"],
-	// 	ansPos: 3
-	// },
-	// {
-	// 	species: "lobsters",
-	// 	options: [ "Snipping", "Redness", "Risk", "Caution"],
-	// 	ansPos: 2
-	// }
+	},
+	{
+		species: "toads", 
+		options: ["Wart", "Knot", "Coven", "Clever"],
+		ansPos: 1
+	},
+	{
+		species: "rhinoceroses", 
+		options: ["Flash", "Smash", "Crash", "Rash"],
+		ansPos: 2
+	},
+	{
+		species: "buffaloes", 
+		options: ["Obstinacy", "Stubborn", "Rudeness", "Sass"],
+		ansPos: 0
+	},
+	{
+		species: "sharks", 
+		options: ["Shriek", "Fright", "Nervous titter", "Shiver"],
+		ansPos: 3
+	},
+	{
+		species: "starlings", 
+		options: ["Quiverescence", "Flickeration", "Palpatation", "Murmuration"],
+		ansPos: 3
+	},
+	{
+		species: "lobsters",
+		options: [ "Snipping", "Redness", "Risk", "Caution"],
+		ansPos: 2
+	}
 ];
 	//for extras
+	/*randomize questions if i get more than 10. get 10 random numbers
+	push to array, let those be the question?
+	In ES6, Array#from and Arrow function can be used.
+		Array.from({length: 6}, () => Math.floor(Math.random() * 9));
+		but no repeating
+	var foo = new Array(45);//create an empty array with length 45
+	then when you want to use it... (un-optimized, just for example)
+
+	for(var i=0;i<foo.length;i++){
+  document.write('Item: ' + (i+1) + ' of ' + foo.length + '<br/>'); 
+}
+
+
+	*/
 	// {
 	// 	species: "salamanders?",
 	// 	options: ["Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg"],
@@ -86,28 +100,6 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 /////////////////////////////////////////////
 //////           FUNCTIONS:            //////
 /////////////////////////////////////////////
-
-
-///////  THE QUESTION CARD  ///////
-//just make one. you'll call this in the timeout. it'll show for the length of time on the timer
-//the card will determined by the idx/count/cardNumber of array 				<img src="${questions[0].themeImg}" alt="dummytext">
-	// function renderCard(idx){
-	// 	$('#cardHolder').html(`
-	// 		<div>
-	// 			<h1>What is a group of <span class='animalName'>${questions[idx][0]}</span> called?</h1>
-	// 			<ul>
-	// 				<li><div class="choiceBtn" data-key="A">A. ${questions[idx][1]}</div></li>
-	// 				<li><div class="choiceBtn" data-key="B">B. ${questions[idx][2]}</div></li>
-	// 			</ul>
-	// 			<ul>
-	// 				<li><div class="choiceBtn" data-key="C">C. ${questions[idx][3]}</div></li>
-	// 				<li><div class="choiceBtn" data-key="D">D. ${questions[idx][4]}</div></li>
-	// 			</ul>
-	// 			<p>Question <span>${idx + 1}</span> of <span>${questions.length}</span></p>
-	// 		</div>
-	// 	`)
-	// }
-
 	//function to pose questions. render to dom. count down starts. renders q
 	//sep question from buttons
 	function renderQuestion() {
@@ -119,31 +111,25 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 		`);//not sure if nec if i put 10 secs in html
 			//dom: question
 			$("#cardHolder").html(`
-				<h2 class="quizQuestion">What is the word for a group of ${questions[cardPosition].species}?</h2>
-			`);
+				<h2 class="quizQuestion">What is the word for a group of ${questions[cardPosition].species}?</h2>`);
 			//dom: buttons. the awful part
 			//arr of options that'll be buttons/divs/radio?
 			let optionsArray = questions[cardPosition].options;
-			//arr.forEach(function callback(currentValue, index, array) {
-			//	your iterator
-			//}[, thisArg]);
 			optionsArray.forEach(function(option, idx){
 				$("#choices").append(`
 					<div class="choiceBtn" data-key="${idx}">${option}</div>
 					`);
-			});
+			})
 			quizTimer = setInterval(timer, 1000);//this is just the seconds. not part of questioning.
 		} else { //as in there are no more questions bc index dernt exist
-			console.log("quiz is done");
 			$("#grade").html(`
 				<h2 class="asideH2">Time is up!</h2>
 				<p>Final score: ${score} right and ${questions.length - score} wrong for ${score/questions.length * 100}%.</p>
 				<p>Hit "Restart" to play again?</p>
 			`);
 			$("#start").text("Restart").show();
-
 		}
-	}
+	};
 
 //////// THE CHANGE / NEW QUESTION (the interval) ////////
 // move up the card deck cardPos
@@ -152,16 +138,16 @@ function newCard() {
 	cardPosition++;
 	clearInterval(quizTimer);
 	seconds = 10;
-	$("#cardHolder").html('');
-	$("#choices").html('');
-	setTimeout(()=>{
-		$("#grade").html('');
-		$('#timer').html(`
+	$("#cardHolder").empty();
+	$("#choices").empty();
+	$('#timer').html(`
 			<h2 class="asideH2">Time Remaining: <span> 10 secs</span></h2>
 		`);
+	setTimeout(()=>{
+		$("#grade").empty();
 		renderQuestion();
 	}, 2000)
-}
+};
 
 
 //////// THE TIMER (the look, not the timing) ////////
@@ -174,9 +160,11 @@ function newCard() {
 //buttons load but need to empty first.
 function timer(){
 	seconds--;
-	if(seconds <= 0){
-		showMessage("unanswered");
+	if(seconds < 0){
+		// showMessage("unanswered");
+		// $("#choices").empty();
 		setTimeout(()=>{
+			// $("#grade").empty();//clear message
 			newCard();
 		}, 2000);
 	} else {
@@ -197,20 +185,22 @@ function showMessage(result){
 				<h1>Bugger!</h1>
 				<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
 				`);
-	} else if(result === "unanswered") {
-			$("#grade").html(`
-				<h1>Oops, pokeypants!</h1>
-				<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
-				`);
-	}
+	} //else if(result === "unanswered") {
+	// 		$("#grade").html(`
+	// 			<h1>Oops, pokeypants!</h1>
+	// 			<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
+	// 			`);
+	// }
 }
 
 //clear old results, clean up. renderqeustuion fcn
 	function startQuiz(){
 		$(this).hide();
+		$(".intro").hide();
 		$("#stop").show();
 		cardPosition = 0;
 		seconds = 10;
+		score = 0;
 		$("#choices").empty();
 		renderQuestion();
 	}
@@ -248,7 +238,7 @@ function showMessage(result){
 		//get this squestion's correct answer's position
 		let answerPos = questions[cardPosition].ansPos;
 		answer = questions[cardPosition].options[answerPos];
-		if(userAnswer == answerPos){
+		if(userAnswer === answerPos){
 			score++;
 			showMessage("correct");
 		} else {
@@ -301,7 +291,25 @@ the other shows as in displays. use give/ask in interval because I am asking ove
 				// console.log(typeof userAnswer); //string
 				// console.log(typeof correctAnswer);//
 
-
+///////  THE QUESTION CARD  ///////
+//just make one. you'll call this in the timeout. it'll show for the length of time on the timer
+//the card will determined by the idx/count/cardNumber of array 				<img src="${questions[0].themeImg}" alt="dummytext">
+	// function renderCard(idx){
+	// 	$('#cardHolder').html(`
+	// 		<div>
+	// 			<h1>What is a group of <span class='animalName'>${questions[idx][0]}</span> called?</h1>
+	// 			<ul>
+	// 				<li><div class="choiceBtn" data-key="A">A. ${questions[idx][1]}</div></li>
+	// 				<li><div class="choiceBtn" data-key="B">B. ${questions[idx][2]}</div></li>
+	// 			</ul>
+	// 			<ul>
+	// 				<li><div class="choiceBtn" data-key="C">C. ${questions[idx][3]}</div></li>
+	// 				<li><div class="choiceBtn" data-key="D">D. ${questions[idx][4]}</div></li>
+	// 			</ul>
+	// 			<p>Question <span>${idx + 1}</span> of <span>${questions.length}</span></p>
+	// 		</div>
+	// 	`)
+	// }
 
 
 
