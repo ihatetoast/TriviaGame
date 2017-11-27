@@ -1,9 +1,9 @@
 $(document).ready(function(){
 //i got vars out me arse:
 	let score = 0;
-	let cardNumber;//0 because index and not ordinal number
-	// let userAnswer; //will be determined by data-key on click. maybe also keycode?
-
+	let cardPosition = 0;//0 because index and not ordinal number
+	let userAnswer; //will be determined by data-key on click. maybe also keycode?
+	let seconds = 10;
 
 	// Variable showImage will hold the setInterval when we start the slideshow
 	// var showImage; give it a name so i can stop it.
@@ -16,32 +16,70 @@ until you figure that out, though, stick with 10.
 OOOOOOOOOORRRR shuffle the array before each quiz.
 */
 	const questions = [
-	["crows", "Murder", "Clique", "Britches", "Ruby", "A"],
-	["elephants", "Circus", "Fantastic", "Parade", "Pride", "C"],
-	["hippopotamuses", "Bloat", "Belch", "Belly", "Band", "A"],
-	["squids", "Schloop", "Pod", "Crowd", "Audience", "D"],
-	["toads", "Wart", "Knot", "Coven", "Clever", "B"],
-	["rhinoceroses", "Flash", "Smash", "Crash", "Rash", "C"],
-	["buffaloes", "Obstinacy", "Stubborn", "Rudeness", "Sass", "A"],
-	["sharks", "Shriek", "Fright", "Nervous titter", "Shiver", "D"],
-	["starlings", "Quiverescence", "Flickeration", "Palpatation", "Murmuration", "D"],
-	["lobsters", "Snipping", "Redness", "Risk", "Caution", "C"]
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
-	// ["salamanders?", "Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg", "B"],
+	{
+		species: "crows",
+		options: ["Murder", "Clique", "Britches", "Ruby"],
+		ansPos: 1
+	},
+	{
+		species: "elephants",
+		options: ["Circus", "Fantastic", "Parade", "Pride"],
+		ansPos: 2
+	},
+	{
+		species: "hippopotamuses",
+		options: ["Bloat", "Belch", "Belly", "Band"],
+		ansPos: 0
+	},
+	{
+		species: "squids",
+		options: ["Schloop", "Pod", "Crowd", "Audience"],
+		ansPos: 3
+	},
+	{
+		species: "toads", 
+		options: ["Wart", "Knot", "Coven", "Clever"],
+		ansPos: 1
+	},
+	{
+		species: "rhinoceroses", 
+		options: ["Flash", "Smash", "Crash", "Rash"],
+		ansPos: 2
+	},
+	{
+		species: "buffaloes", 
+		options: ["Obstinacy", "Stubborn", "Rudeness", "Sass"],
+		ansPos: 0
+	},
+	{
+		species: "sharks", 
+		options: ["Shriek", "Fright", "Nervous titter", "Shiver"],
+		ansPos: 3
+	},
+	{
+		species: "starlings", 
+		options: ["Quiverescence", "Flickeration", "Palpatation", "Murmuration"],
+		ansPos: 3
+	},
+	{
+		species: "lobsters",
+		options: [ "Snipping", "Redness", "Risk", "Caution"],
+		ansPos: 2
+	}
+];
+	//for extras
+	// {
+	// 	species: "salamanders?",
+	// 	options: ["Meerschaum", "Maelstrom", "Schadenfreude", "Blitzkrieg"],
+	// 	ansPos: 1
+	// },
+	// 
+	// {
+	// 	species: goes into a span in a div. one question but animal changes
+	// 	options: array of answers. note the idx of the answer. indices of these as data-key
+	// 	ansPos: index of the answer. will need to match the user's option
+	// },
 
-	
-	]
 
 	/*events (HEY, TAs! I TRIED A FEW VERSIONS AND THEY ALL WORK. OTHER 
 	THAN ONE BEING BULKY, IS THERE REALLY A PREFERENCE?)*/
@@ -53,49 +91,120 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 	// 	// console.log("STOP button booped");
 	// 	stopQuiz();
 	// });
-	$("#start").click(startQuiz);//works. am happy
+	$("#start").click(renderQuestion);//works. am happy
 	$("#stop").click(stopQuiz);// works. am happy
 		// $("#start").on("click", startQuiz);
 		// $("#stop").on("click", stopQuiz);
 
+
+/////////////////////////////////////////////
+//////           FUNCTIONS:            //////
+/////////////////////////////////////////////
+
+
+///////  THE QUESTION CARD  ///////
 //just make one. you'll call this in the timeout. it'll show for the length of time on the timer
 //the card will determined by the idx/count/cardNumber of array 				<img src="${questions[0].themeImg}" alt="dummytext">
-	function renderCard(idx){
-		$('#cardHolder').html(`
-			<div>
-				<h1>What is a group of <span class='animalName'>${questions[idx][0]}</span> called?</h1>
-				<ul>
-					<li><div class="choiceBtn" data-key="A">A. ${questions[idx][1]}</div></li>
-					<li><div class="choiceBtn" data-key="B">B. ${questions[idx][2]}</div></li>
-				</ul>
-				<ul>
-					<li><div class="choiceBtn" data-key="C">C. ${questions[idx][3]}</div></li>
-					<li><div class="choiceBtn" data-key="D">D. ${questions[idx][4]}</div></li>
-				</ul>
-				<p>Question <span>${idx + 1}</span> of <span>${questions.length}</span></p>
-			</div>
-		`)
-	}
+	// function renderCard(idx){
+	// 	$('#cardHolder').html(`
+	// 		<div>
+	// 			<h1>What is a group of <span class='animalName'>${questions[idx][0]}</span> called?</h1>
+	// 			<ul>
+	// 				<li><div class="choiceBtn" data-key="A">A. ${questions[idx][1]}</div></li>
+	// 				<li><div class="choiceBtn" data-key="B">B. ${questions[idx][2]}</div></li>
+	// 			</ul>
+	// 			<ul>
+	// 				<li><div class="choiceBtn" data-key="C">C. ${questions[idx][3]}</div></li>
+	// 				<li><div class="choiceBtn" data-key="D">D. ${questions[idx][4]}</div></li>
+	// 			</ul>
+	// 			<p>Question <span>${idx + 1}</span> of <span>${questions.length}</span></p>
+	// 		</div>
+	// 	`)
+	// }
 
-let correctAnswer;
-let userAnswer;
-//else stop
-
-
-//function to ask all the questions
-	const askQuestions = function(idx) {
+	//function to pose questions. render to dom. count down starts. renders q
+	//sep question from buttons
+	function renderQuestion() {
 	//if the index exists, render the question and reassign answer 
-		if(questions[idx]){
-			renderCard(idx)
-			correctAnswer = questions[idx][5];
+		if(questions[cardPosition]){
+			//dom
+			$("#cardHolder").html(`
+				<h2 class="quizQuestion">What is the word for a group of ${questions[cardPosition].species}?</h2>
+			`);
+			//arr of options that'll be buttons/divs/radio?
+			let optionsArray = questions[cardPosition].options;
+			// console.log(optionsArray);
+// 			arr.forEach(function callback(currentValue, index, array) {
+//     //your iterator
+// }[, thisArg]);
+			optionsArray.forEach(function(option, idx){
+				console.log(`${idx} is ${option}`);
+				$("#choices").append(`
+					<li data-key="${idx}"><div class="choice">${option}</div></li>
+					`)
+			});
+			//this is just the seconds. not part of flipping.
+			quizTimer = setInterval(timer, 1000);
 		}
 		else {
 			console.log("Quiz is finished");
+			$("#grade").html(`
+				<h2 class="asideH2">Time is up!</h2>
+				<p>Results will be here.</p>
+			`);
+			// $("#timer").hide();
 		}
-		quizTimer = setTimeout(()=>{
-				askQuestions(idx + 1);
-			}, 5000);	
+		// quizTimer = setTimeout(()=>{
+		// 		askQuestion(idx + 1);
+		// 	}, 5000);	
 	}
+
+//////// THE CHANGE / NEW QUESTION (the interval) ////////
+// move up the card deck cardPos
+//restart timer. reset seconds. reset html dom elems timer
+function newCard() {
+	cardPosition++;
+	clearInterval(quizTimer);
+	seconds = 10;
+	$("#timer").html('<h2 class="asideH2">right wrong shown</h2>');
+	$("#cardHolder").html('');
+	$("#choices").html('');
+	setTimeout(()=>{
+		renderQuestion();
+		//answer or grade fcn here 
+		//evt handlers first.
+	}, 2000)
+}
+
+
+
+//////// THE TIMER (the look, not the timing) ////////
+//function that shows the counting down. that fcn is passed into setTimeout
+//count set at a time. goes down every 1000ms.
+//does nothing but decrement time remaining. html done thorugh var of timeRem
+//maybe a warning? v2
+//if no more time, ask next question, give right or wrong notice
+//if more time, show next second
+//buttons load but need to empty first.
+function timer(){
+	seconds--;
+	if(seconds <= 0){
+		setTimeout(()=>{
+			console.log('timer is done');
+			newCard();
+		});
+	} else {
+		$('#timer').html(`
+			<h2 class="asideH2">Time Remaining:</h2>
+			<p>${seconds} secs</p>
+		`);
+	}
+};
+
+//////////////////////////////////////////////
+//////////     THE EVENTS       //////////////
+//////////////////////////////////////////////
+
 
 	$("#cardHolder").on("click", ".choiceBtn", function(){
 		userAnswer = this.dataset.key;
@@ -115,9 +224,9 @@ function checkAnswer(actual, guess){
 
 
 	function startQuiz(){
-		cardNumber = 0;
+		cardPosition = 0;
 		console.log("quiz started");
-		askQuestions(cardNumber);
+		renderQuestion();
 	}
 
 	function stopQuiz(){
