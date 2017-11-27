@@ -11,13 +11,14 @@ li {
 .asideH2 {
   font-size: 1.2em; }
 
-.choice {
+.choiceBtn {
   width: 5em;
   height: 5em;
   background-color: #8d46b0;
   border-radius: 50%;
   line-height: 5em;
   text-align: center;
+  display: inline-block;
   color: white;
   font-size: 1.5em; }
 

@@ -30,8 +30,9 @@ li {
 .asideH2 {
 	font-size: 1.2em;
 }
-.choice {
+.choiceBtn {
 	@include roundButton(5em, 5em, #8d46b0);
+	display: inline-block;
 	color: white;
 	font-size: 1.5em;
 }

@@ -4,6 +4,7 @@ $(document).ready(function(){
 	let cardPosition = 0;//0 because index and not ordinal number
 	let userAnswer; //will be determined by data-key on click. maybe also keycode?
 	let seconds = 10;
+	let answer;
 
 	// Variable showImage will hold the setInterval when we start the slideshow
 	// var showImage; give it a name so i can stop it.
@@ -19,7 +20,7 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 	{
 		species: "crows",
 		options: ["Murder", "Clique", "Britches", "Ruby"],
-		ansPos: 1
+		ansPos: 0
 	},
 	{
 		species: "elephants",
@@ -91,7 +92,7 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 	// 	// console.log("STOP button booped");
 	// 	stopQuiz();
 	// });
-	$("#start").click(renderQuestion);//works. am happy
+	$("#start").click(startQuiz);//works. am happy
 	$("#stop").click(stopQuiz);// works. am happy
 		// $("#start").on("click", startQuiz);
 		// $("#stop").on("click", stopQuiz);
@@ -140,7 +141,7 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 			optionsArray.forEach(function(option, idx){
 				console.log(`${idx} is ${option}`);
 				$("#choices").append(`
-					<li data-key="${idx}"><div class="choice">${option}</div></li>
+					<div class="choiceBtn" data-key="${idx}">${option}</div>
 					`)
 			});
 			//this is just the seconds. not part of flipping.
@@ -166,16 +167,15 @@ function newCard() {
 	cardPosition++;
 	clearInterval(quizTimer);
 	seconds = 10;
-	$("#timer").html('<h2 class="asideH2">right wrong shown</h2>');
 	$("#cardHolder").html('');
 	$("#choices").html('');
 	setTimeout(()=>{
+		$("#grade").html('');
 		renderQuestion();
 		//answer or grade fcn here 
 		//evt handlers first.
 	}, 2000)
 }
-
 
 
 //////// THE TIMER (the look, not the timing) ////////
@@ -201,39 +201,62 @@ function timer(){
 	}
 };
 
+function showMessage(result){
+	if(result === "correct"){
+		console.log(`score is ${score} (should have gone up)`);
+			$("#grade").html(`
+				<h1>Huzzah!</h1>
+				`);
+	} else if(result === "incorrect") {
+		console.log(`score is ${score} (should not have gone up`);
+			$("#grade").html(`
+				<h1>Bugger!</h1>
+				<p>Answer was ${answer}</p>
+				`);
+	}
+}
+
+//clear old results, clean up. renderqeustuion fcn
+	function startQuiz(){
+		console.log(this);
+		$(this).hide();
+		$("#stop").show();
+		cardPosition = 0;
+		console.log("quiz started");
+		renderQuestion();
+	}
+//a quit midway fcn so my patience isn't totally gone.
+	function stopQuiz(){
+		$(this).hide();
+		$("#start").show();
+		console.log("stopQuiz fired");
+		clearTimeout(quizTimer);
+		
+	}
+
 //////////////////////////////////////////////
 //////////     THE EVENTS       //////////////
 //////////////////////////////////////////////
 
 
-	$("#cardHolder").on("click", ".choiceBtn", function(){
-		userAnswer = this.dataset.key;
+	$("#choices").on("click", ".choiceBtn", function(e){
+		//why didn't dataset work? jQ?
+		userAnswer = $(this).data("key");
 		console.log(`user's answer is ${userAnswer}`);
-		console.log(`Correct answer is ${correctAnswer}`);
-		checkAnswer(correctAnswer, userAnswer);
+		//get this squestion's correct answer's position
+		let answerPos = questions[cardPosition].ansPos;
+		answer = questions[cardPosition].options[answerPos];
+		console.log(`answer is ${answer}`);
+		if(userAnswer == answerPos){
+			score++;
+			showMessage("correct");
+		} else {
+			showMessage("incorrect");
+		}
+		newCard();
 	});
 
-function checkAnswer(actual, guess){
-	if(actual == guess){
-		score++;
-		console.log(`user is right. score is now ${score} out of 10`);
-	} else {
-		console.log(`user is wrong score is still ${score} out of 10`);
-	}
-}
 
-
-	function startQuiz(){
-		cardPosition = 0;
-		console.log("quiz started");
-		renderQuestion();
-	}
-
-	function stopQuiz(){
-		console.log("stopQuiz fired");
-		clearTimeout(quizTimer);
-		
-	}
 
 //like the slide show inclass work
 //so we need array of something to show. array of objs?
