@@ -80,7 +80,6 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 let correctAnswer;
 let userAnswer;
 //else stop
-//struggled with stopping the interval. found fix with the google-fus. 
 
 
 //function to ask all the questions
