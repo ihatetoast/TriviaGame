@@ -1,9 +1,11 @@
+/*TAs. I had to do a lot of fu of the google art on this one and felt more discombobulated with all the mini functions and dealing with setTimeout and setInterval, so i am NOT cleaning up my notes or comments until much later. I want these notes here when I look over them in the future if I want to use something from this. I'll clean it up before April*/
+
 $(document).ready(function(){
 //i got vars out me arse:
 	let score = 0;
 	let cardPosition = 0;//0 because index and not ordinal number
 	let userAnswer; //will be determined by data-key on click. maybe also keycode?
-	let seconds = 10;
+	let seconds = 5;
 	let answer;
 
 	// Variable showImage will hold the setInterval when we start the slideshow
@@ -191,45 +193,48 @@ function timer(){
 	if(seconds <= 0){
 		setTimeout(()=>{
 			console.log('timer is done');
+			showMessage("unanswered");
 			newCard();
 		});
 	} else {
 		$('#timer').html(`
-			<h2 class="asideH2">Time Remaining:</h2>
-			<p>${seconds} secs</p>
+			<h2 class="asideH2">Time Remaining: <span>${seconds} secs</span></h2>
 		`);
 	}
 };
 
 function showMessage(result){
 	if(result === "correct"){
-		console.log(`score is ${score} (should have gone up)`);
 			$("#grade").html(`
 				<h1>Huzzah!</h1>
+				<p>Score: ${score}/${questions.length}</p>
 				`);
 	} else if(result === "incorrect") {
-		console.log(`score is ${score} (should not have gone up`);
 			$("#grade").html(`
 				<h1>Bugger!</h1>
-				<p>Answer was ${answer}</p>
+				<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
+				`);
+	} else if(result === "unanswered") {
+			$("#grade").html(`
+				<h1>Oops, pokeypants!</h1>
+				<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
 				`);
 	}
 }
 
 //clear old results, clean up. renderqeustuion fcn
 	function startQuiz(){
-		console.log(this);
 		$(this).hide();
 		$("#stop").show();
 		cardPosition = 0;
-		console.log("quiz started");
+		seconds = 5;
+		$("#choices").empty();
 		renderQuestion();
 	}
 //a quit midway fcn so my patience isn't totally gone.
 	function stopQuiz(){
 		$(this).hide();
 		$("#start").show();
-		console.log("stopQuiz fired");
 		clearTimeout(quizTimer);
 		
 	}

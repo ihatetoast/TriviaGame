@@ -11,7 +11,6 @@ $white: #E1DFFF;
 	height: $h;
 	background-color: $color;
 	border-radius: 50%;
-	line-height: $h;
 	text-align: center;
 }
 
@@ -32,7 +31,8 @@ li {
 }
 .choiceBtn {
 	@include roundButton(5em, 5em, #8d46b0);
-	display: inline-block;
 	color: white;
+	display: inline-block;
 	font-size: 1.5em;
+	padding-top: 1.5em;
 }
