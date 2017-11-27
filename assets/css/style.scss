@@ -23,6 +23,22 @@ li {
 	list-style: none;
 }
 
+aside {
+	border: 1px solid aqua;
+}
+section {
+	border: 1px solid sienna;
+}
+header {
+	border: 1px solid red;
+	h1 {
+		font-size: 1.2em;
+	}
+}
+footer{
+	border: 1px solid green;
+}
+
 #cardHolder {
 	background-color: $white;
 }
@@ -33,6 +49,6 @@ li {
 	@include roundButton(5em, 5em, #8d46b0);
 	color: white;
 	display: inline-block;
-	font-size: 1.5em;
+	font-size: 1em;
 	padding-top: 1.5em;
 }

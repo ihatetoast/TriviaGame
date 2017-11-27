@@ -5,7 +5,7 @@ $(document).ready(function(){
 	let score = 0;
 	let cardPosition = 0;//0 because index and not ordinal number
 	let userAnswer; //will be determined by data-key on click. maybe also keycode?
-	let seconds = 5;
+	let seconds = 10;
 	let answer;
 
 	// Variable showImage will hold the setInterval when we start the slideshow
@@ -38,37 +38,37 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 		species: "squids",
 		options: ["Schloop", "Pod", "Crowd", "Audience"],
 		ansPos: 3
-	},
-	{
-		species: "toads", 
-		options: ["Wart", "Knot", "Coven", "Clever"],
-		ansPos: 1
-	},
-	{
-		species: "rhinoceroses", 
-		options: ["Flash", "Smash", "Crash", "Rash"],
-		ansPos: 2
-	},
-	{
-		species: "buffaloes", 
-		options: ["Obstinacy", "Stubborn", "Rudeness", "Sass"],
-		ansPos: 0
-	},
-	{
-		species: "sharks", 
-		options: ["Shriek", "Fright", "Nervous titter", "Shiver"],
-		ansPos: 3
-	},
-	{
-		species: "starlings", 
-		options: ["Quiverescence", "Flickeration", "Palpatation", "Murmuration"],
-		ansPos: 3
-	},
-	{
-		species: "lobsters",
-		options: [ "Snipping", "Redness", "Risk", "Caution"],
-		ansPos: 2
-	}
+	}//,
+	// {
+	// 	species: "toads", 
+	// 	options: ["Wart", "Knot", "Coven", "Clever"],
+	// 	ansPos: 1
+	// },
+	// {
+	// 	species: "rhinoceroses", 
+	// 	options: ["Flash", "Smash", "Crash", "Rash"],
+	// 	ansPos: 2
+	// },
+	// {
+	// 	species: "buffaloes", 
+	// 	options: ["Obstinacy", "Stubborn", "Rudeness", "Sass"],
+	// 	ansPos: 0
+	// },
+	// {
+	// 	species: "sharks", 
+	// 	options: ["Shriek", "Fright", "Nervous titter", "Shiver"],
+	// 	ansPos: 3
+	// },
+	// {
+	// 	species: "starlings", 
+	// 	options: ["Quiverescence", "Flickeration", "Palpatation", "Murmuration"],
+	// 	ansPos: 3
+	// },
+	// {
+	// 	species: "lobsters",
+	// 	options: [ "Snipping", "Redness", "Risk", "Caution"],
+	// 	ansPos: 2
+	// }
 ];
 	//for extras
 	// {
@@ -82,23 +82,6 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 	// 	options: array of answers. note the idx of the answer. indices of these as data-key
 	// 	ansPos: index of the answer. will need to match the user's option
 	// },
-
-
-	/*events (HEY, TAs! I TRIED A FEW VERSIONS AND THEY ALL WORK. OTHER 
-	THAN ONE BEING BULKY, IS THERE REALLY A PREFERENCE?)*/
-	// $("#start").on("click", function(){
-	// 	// console.log("START button booped");
-	// 	startQuiz();
-	// });
-	// 	$("#stop").on("click", function(){
-	// 	// console.log("STOP button booped");
-	// 	stopQuiz();
-	// });
-	$("#start").click(startQuiz);//works. am happy
-	$("#stop").click(stopQuiz);// works. am happy
-		// $("#start").on("click", startQuiz);
-		// $("#stop").on("click", stopQuiz);
-
 
 /////////////////////////////////////////////
 //////           FUNCTIONS:            //////
@@ -130,36 +113,36 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 	function renderQuestion() {
 	//if the index exists, render the question and reassign answer 
 		if(questions[cardPosition]){
-			//dom
+			//dom: timer
+			$('#timer').html(`
+			<h2 class="asideH2">Time Remaining: <span> ${seconds} secs</span></h2>
+		`);//not sure if nec if i put 10 secs in html
+			//dom: question
 			$("#cardHolder").html(`
 				<h2 class="quizQuestion">What is the word for a group of ${questions[cardPosition].species}?</h2>
 			`);
+			//dom: buttons. the awful part
 			//arr of options that'll be buttons/divs/radio?
 			let optionsArray = questions[cardPosition].options;
-			// console.log(optionsArray);
-// 			arr.forEach(function callback(currentValue, index, array) {
-//     //your iterator
-// }[, thisArg]);
+			//arr.forEach(function callback(currentValue, index, array) {
+			//	your iterator
+			//}[, thisArg]);
 			optionsArray.forEach(function(option, idx){
-				console.log(`${idx} is ${option}`);
 				$("#choices").append(`
 					<div class="choiceBtn" data-key="${idx}">${option}</div>
-					`)
+					`);
 			});
-			//this is just the seconds. not part of flipping.
-			quizTimer = setInterval(timer, 1000);
-		}
-		else {
-			console.log("Quiz is finished");
+			quizTimer = setInterval(timer, 1000);//this is just the seconds. not part of questioning.
+		} else { //as in there are no more questions bc index dernt exist
+			console.log("quiz is done");
 			$("#grade").html(`
 				<h2 class="asideH2">Time is up!</h2>
-				<p>Results will be here.</p>
+				<p>Final score: ${score} right and ${questions.length - score} wrong for ${score/questions.length * 100}%.</p>
+				<p>Hit "Restart" to play again?</p>
 			`);
-			// $("#timer").hide();
+			$("#start").text("Restart").show();
+
 		}
-		// quizTimer = setTimeout(()=>{
-		// 		askQuestion(idx + 1);
-		// 	}, 5000);	
 	}
 
 //////// THE CHANGE / NEW QUESTION (the interval) ////////
@@ -173,9 +156,10 @@ function newCard() {
 	$("#choices").html('');
 	setTimeout(()=>{
 		$("#grade").html('');
+		$('#timer').html(`
+			<h2 class="asideH2">Time Remaining: <span> 10 secs</span></h2>
+		`);
 		renderQuestion();
-		//answer or grade fcn here 
-		//evt handlers first.
 	}, 2000)
 }
 
@@ -191,11 +175,10 @@ function newCard() {
 function timer(){
 	seconds--;
 	if(seconds <= 0){
+		showMessage("unanswered");
 		setTimeout(()=>{
-			console.log('timer is done');
-			showMessage("unanswered");
 			newCard();
-		});
+		}, 2000);
 	} else {
 		$('#timer').html(`
 			<h2 class="asideH2">Time Remaining: <span>${seconds} secs</span></h2>
@@ -227,7 +210,7 @@ function showMessage(result){
 		$(this).hide();
 		$("#stop").show();
 		cardPosition = 0;
-		seconds = 5;
+		seconds = 10;
 		$("#choices").empty();
 		renderQuestion();
 	}
@@ -236,22 +219,35 @@ function showMessage(result){
 		$(this).hide();
 		$("#start").show();
 		clearTimeout(quizTimer);
-		
 	}
 
 //////////////////////////////////////////////
 //////////     THE EVENTS       //////////////
 //////////////////////////////////////////////
 
+/*events (HEY, TAs! I TRIED A FEW VERSIONS AND THEY ALL WORK. OTHER 
+	THAN ONE BEING BULKY, IS THERE REALLY A PREFERENCE?)*/
+	// $("#start").on("click", function(){
+	// 	// console.log("START button booped");
+	// 	startQuiz();
+	// });
+	// 	$("#stop").on("click", function(){
+	// 	// console.log("STOP button booped");
+	// 	stopQuiz();
+	// });
+	
+		// $("#start").on("click", startQuiz);
+		// $("#stop").on("click", stopQuiz);
+	$("#start").click(startQuiz);//works. am happy
+	$("#stop").click(stopQuiz);// works. am happy
 
 	$("#choices").on("click", ".choiceBtn", function(e){
+		$('#timer').html('');
 		//why didn't dataset work? jQ?
 		userAnswer = $(this).data("key");
-		console.log(`user's answer is ${userAnswer}`);
 		//get this squestion's correct answer's position
 		let answerPos = questions[cardPosition].ansPos;
 		answer = questions[cardPosition].options[answerPos];
-		console.log(`answer is ${answer}`);
 		if(userAnswer == answerPos){
 			score++;
 			showMessage("correct");

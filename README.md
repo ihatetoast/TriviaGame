@@ -1,6 +1,6 @@
 # Trivia Game with Timed Questions
 
-To Do:
+To Do (logic):
 * (_X_) make the card with the id slots for question and possible answers
 * (_X_) create an array of ~~arrays~~ objs.
 * (_X_) fill "card" of the question and possible answers
@@ -15,12 +15,14 @@ To Do:
 * (__) game over when last card appears
 * (__) total tally shown. 
 * (__) restart if user presses restart game. 
+* (__) audio very last
 
 ---
-### INSTRUCTIONS
-•   You'll create a trivia game that shows only one question until the player answers it or their time runs out.
-•   If the player selects the correct answer, show a screen congratulating them for choosing the right option. After a few seconds, display the next question -- do this without user input.
-•   The scenario is similar for wrong answers and time-outs.
-    ◦   If the player runs out of time, tell the player that time's up and display the correct answer. Wait a few seconds, then show the next question.
-    ◦   If the player chooses the wrong answer, tell the player they selected the wrong option and then display the correct answer. Wait a few seconds, then show the next question.
-•   On the final screen, show the number of correct answers, incorrect answers, and an option to restart the game (without reloading the page).
+To Do (Shtoyl)
+* (__) colours chosen / coolors dot com
+* (__) bootswatch theme altered with new colours because bootstrap blue is fugly
+* (__) images somewhere because it's too plain
+* (__)mobile first
+* (__)aside and section planned
+* (__)buttons look 3D
+* (__)? maybe timer less boring (look up CSS3 Compass)
