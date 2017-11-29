@@ -1,23 +1,16 @@
-/*TAs. I had to do a lot of fu of the google art on this one and felt more discombobulated with all the mini functions and dealing with setTimeout and setInterval, so i am NOT cleaning up my notes or comments until much later. I want these notes here when I look over them in the future if I want to use something from this. I'll clean it up before April*/
 
 $(document).ready(function(){
+
 //i got vars out me arse:
 	let score = 0;
-	let cardPosition = 0;//0 because index and not ordinal number
-	let userAnswer; //will be determined by data-key on click. maybe also keycode?
+	
+	let userAnswer = null; 
+	let answer = null;
+	var quizTimer;
 	let seconds = 10;
-	let answer;
+	let cardPosition = 0;
 
-	// Variable showImage will hold the setInterval when we start the slideshow
-	// var showImage; give it a name so i can stop it.
-	let quizTimer;
-
-/*Array todo: build out to 100. comment out all but 10 at first
-set cardnumber to be an array with random numbers from 0 to the array length minus 10
-so that the test taker gets 10 random ones. 
-until you figure that out, though, stick with 10.
-OOOOOOOOOORRRR shuffle the array before each quiz.
-*/
+//question bank:
 	const questions = [
 	{
 		species: "crows",
@@ -103,25 +96,24 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 	//function to pose questions. render to dom. count down starts. renders q
 	//sep question from buttons
 	function renderQuestion() {
-	//if the index exists, render the question and reassign answer 
 		if(questions[cardPosition]){
-			//dom: timer
+
 			$('#timer').html(`
-			<h2 class="asideH2">Time Remaining: <span> ${seconds} secs</span></h2>
-		`);//not sure if nec if i put 10 secs in html
-			//dom: question
+			<h2 class="asideH2">Time Remaining: <span> ${seconds} secs</span></h2>`);
+
 			$("#cardHolder").html(`
 				<h2 class="quizQuestion">What is the word for a group of ${questions[cardPosition].species}?</h2>`);
-			//dom: buttons. the awful part
-			//arr of options that'll be buttons/divs/radio?
+
 			let optionsArray = questions[cardPosition].options;
 			optionsArray.forEach(function(option, idx){
 				$("#choices").append(`
 					<div class="choiceBtn" data-key="${idx}">${option}</div>
 					`);
-			})
-			quizTimer = setInterval(timer, 1000);//this is just the seconds. not part of questioning.
-		} else { //as in there are no more questions bc index dernt exist
+			});
+
+			quizTimer = setInterval(timer, 1000);
+
+		} else { 
 			$("#grade").html(`
 				<h2 class="asideH2">Time is up!</h2>
 				<p>Final score: ${score} right and ${questions.length - score} wrong for ${score/questions.length * 100}%.</p>
@@ -134,110 +126,93 @@ OOOOOOOOOORRRR shuffle the array before each quiz.
 //////// THE CHANGE / NEW QUESTION (the interval) ////////
 // move up the card deck cardPos
 //restart timer. reset seconds. reset html dom elems timer
-function newCard() {
-	cardPosition++;
-	clearInterval(quizTimer);
-	seconds = 10;
-	$("#cardHolder").empty();
-	$("#choices").empty();
-	$('#timer').html(`
-			<h2 class="asideH2">Time Remaining: <span> 10 secs</span></h2>
-		`);
-	setTimeout(()=>{
-		$("#grade").empty();
-		renderQuestion();
-	}, 2000)
-};
+	function newCard() {
+		cardPosition++;
+		clearInterval(quizTimer);
+		seconds = 10;
 
+		$('#timer').html(`<h2 class="asideH2">Time Remaining: <span> 10 secs</span></h2>`);
 
-//////// THE TIMER (the look, not the timing) ////////
-//function that shows the counting down. that fcn is passed into setTimeout
-//count set at a time. goes down every 1000ms.
-//does nothing but decrement time remaining. html done thorugh var of timeRem
-//maybe a warning? v2
-//if no more time, ask next question, give right or wrong notice
-//if more time, show next second
-//buttons load but need to empty first.
+		setTimeout(()=>{
+			wipeOut();
+			renderQuestion();
+		}, 2000)
+	};
+	// score = 0;
+	// cardPosition = 0;
+	// userAnswer = null; 
+	// seconds = 10;
+	// answer= null;
+//THIS is where my grief isV V V
+// clear interval bidniss here
 function timer(){
 	seconds--;
-	if(seconds < 0){
-		// showMessage("unanswered");
-		// $("#choices").empty();
-		setTimeout(()=>{
-			// $("#grade").empty();//clear message
+
+	if(seconds <= 0){
+		clearInterval(quizTimer);
+		showMessage("unanswered");
+		setTimeout(function(){
+			wipeOut();
 			newCard();
 		}, 2000);
-	} else {
+	} //THIS ^ ^ ^ 
+	else {
 		$('#timer').html(`
-			<h2 class="asideH2">Time Remaining: <span>${seconds} secs</span></h2>
-		`);
+			<h2 class="asideH2">Time Remaining: <span>${seconds} secs</span></h2>`);
 	}
 };
 
-function showMessage(result){
-	if(result === "correct"){
-			$("#grade").html(`
-				<h1>Huzzah!</h1>
-				<p>Score: ${score}/${questions.length}</p>
-				`);
-	} else if(result === "incorrect") {
-			$("#grade").html(`
-				<h1>Bugger!</h1>
-				<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
-				`);
-	} //else if(result === "unanswered") {
-	// 		$("#grade").html(`
-	// 			<h1>Oops, pokeypants!</h1>
-	// 			<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
-	// 			`);
-	// }
-}
+function wipeOut (){
+	$('#grade').empty();
+	$("#cardHolder").empty();
+	$("#choices").empty();
+};
 
-//clear old results, clean up. renderqeustuion fcn
+	function showMessage(result){
+		if(result === "correct"){
+				$("#grade").html(`
+					<h1>Huzzah!</h1>
+					<p>Score: ${score}/${questions.length}</p>
+					`);
+		} else if(result === "incorrect") {
+				$("#grade").html(`
+					<h1>Bugger!</h1>
+					<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
+					`);
+		} else if(result === "unanswered"){
+			$("#grade").html(`
+					<h1>Pokey pants!</h1>
+					<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
+					`);
+		}
+	}
+
+
 	function startQuiz(){
+		wipeOut();
 		$(this).hide();
 		$(".intro").hide();
 		$("#stop").show();
 		cardPosition = 0;
 		seconds = 10;
 		score = 0;
-		$("#choices").empty();
 		renderQuestion();
 	}
-//a quit midway fcn so my patience isn't totally gone.
-	function stopQuiz(){
-		$(this).hide();
-		$("#start").show();
-		clearTimeout(quizTimer);
-	}
+
 
 //////////////////////////////////////////////
 //////////     THE EVENTS       //////////////
 //////////////////////////////////////////////
 
-/*events (HEY, TAs! I TRIED A FEW VERSIONS AND THEY ALL WORK. OTHER 
-	THAN ONE BEING BULKY, IS THERE REALLY A PREFERENCE?)*/
-	// $("#start").on("click", function(){
-	// 	// console.log("START button booped");
-	// 	startQuiz();
-	// });
-	// 	$("#stop").on("click", function(){
-	// 	// console.log("STOP button booped");
-	// 	stopQuiz();
-	// });
-	
-		// $("#start").on("click", startQuiz);
-		// $("#stop").on("click", stopQuiz);
 	$("#start").click(startQuiz);//works. am happy
-	$("#stop").click(stopQuiz);// works. am happy
 
 	$("#choices").on("click", ".choiceBtn", function(e){
 		$('#timer').html('');
-		//why didn't dataset work? jQ?
 		userAnswer = $(this).data("key");
-		//get this squestion's correct answer's position
+
 		let answerPos = questions[cardPosition].ansPos;
 		answer = questions[cardPosition].options[answerPos];
+
 		if(userAnswer === answerPos){
 			score++;
 			showMessage("correct");
@@ -248,6 +223,12 @@ function showMessage(result){
 	});
 
 
+/*Array todo: build out to 100. comment out all but 10 at first
+set cardnumber to be an array with random numbers from 0 to the array length minus 10
+so that the test taker gets 10 random ones. 
+until you figure that out, though, stick with 10.
+OOOOOOOOOORRRR shuffle the array before each quiz.
+*/
 
 //like the slide show inclass work
 //so we need array of something to show. array of objs?
@@ -312,7 +293,13 @@ the other shows as in displays. use give/ask in interval because I am asking ove
 	// }
 
 
-
+// optionsArray.forEach(function(option, idx){ 
+// 				var child = $("<div class='choiceBtn' data-key="+idx+">"+option+"</div>");
+// 				child.on()
+// 				$("#choices").append(`
+					
+// 					`);
+// 			})
 
 
 
