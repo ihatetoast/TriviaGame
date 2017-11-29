@@ -1,15 +1,6 @@
 
 $(document).ready(function(){
-
-//i got vars out me arse:
-	let score = 0;
 	
-	let userAnswer = null; 
-	let answer = null;
-	var quizTimer;
-	let seconds = 10;
-	let cardPosition = 0;
-
 //question bank:
 	const questions = [
 	{
@@ -61,8 +52,65 @@ $(document).ready(function(){
 		species: "lobsters",
 		options: [ "Snipping", "Redness", "Risk", "Caution"],
 		ansPos: 2
+	},
+	{
+		species: "otters",
+		options: [ "Nookie", "Romp", "Roll", "Thrill"],
+		ansPos: 1
+	},
+	{
+		species: "cormorants",
+		options: [ "Swallow", "Gag", "Sniff", "Gulp"],
+		ansPos: 3
+	},
+	{
+		species: "ravens",
+		options: [ "zanpf", "meanness", "unkindness", "rudeness"],
+		ansPos: 2
+	},
+	{
+		species: "jellyfish",
+		options: [ "morph", "bloom", "bleurph", "scurry"],
+		ansPos: 2
+	},
+	{
+		species: "jays",
+		options: [ "scold", "grounding", "tisk", "grump"],
+		ansPos: 0
+	},
+	{
+		species: "foxes",
+		options: [ "shyness", "creeping", "slither", "skulk"],
+		ansPos: 3
+	},
+	{
+		species: "vultures",
+		options: [ "kettle", "all of them", "committee", "wake"],
+		ansPos: 1
+	},
+	{
+		species: "zebras",
+		options: [ "stripe", "dazzle", "clodding", "sleft"],
+		ansPos: 1
+	},
+	{
+		species: "peacocks",
+		options: [ "ostentation", "glory", "fanning", "fluster"],
+		ansPos: 0
 	}
 ];
+
+const rando = Math.floor(Math.random() * ((questions.length) - 10));
+//i got vars out me arse:
+	let score = 0;
+	console.log(rando);
+	console.log(questions.length);
+	let userAnswer = null; 
+	let answer = null;
+	var quizTimer;
+	let seconds = 10;
+	let cardPosition;
+
 	//for extras
 	/*randomize questions if i get more than 10. get 10 random numbers
 	push to array, let those be the question?
@@ -131,57 +179,52 @@ $(document).ready(function(){
 		clearInterval(quizTimer);
 		seconds = 10;
 
-		$('#timer').html(`<h2 class="asideH2">Time Remaining: <span> 10 secs</span></h2>`);
-
 		setTimeout(()=>{
 			wipeOut();
 			renderQuestion();
 		}, 2000)
 	};
-	// score = 0;
-	// cardPosition = 0;
-	// userAnswer = null; 
-	// seconds = 10;
-	// answer= null;
-//THIS is where my grief isV V V
-// clear interval bidniss here
+
 function timer(){
 	seconds--;
 
 	if(seconds <= 0){
 		clearInterval(quizTimer);
 		showMessage("unanswered");
+		$("#cardHolder").empty();
+		$("#choices").empty();
 		setTimeout(function(){
 			wipeOut();
 			newCard();
 		}, 2000);
-	} //THIS ^ ^ ^ 
+	} 
 	else {
 		$('#timer').html(`
 			<h2 class="asideH2">Time Remaining: <span>${seconds} secs</span></h2>`);
 	}
 };
 
-function wipeOut (){
-	$('#grade').empty();
-	$("#cardHolder").empty();
-	$("#choices").empty();
-};
+	function wipeOut (){
+		seconds = 10;
+		$('#grade').empty();
+		$("#cardHolder").empty();
+		$("#choices").empty();
+	};
 
 	function showMessage(result){
 		if(result === "correct"){
 				$("#grade").html(`
-					<h1>Huzzah!</h1>
+					<h2>Huzzah!</h2>
 					<p>Score: ${score}/${questions.length}</p>
 					`);
 		} else if(result === "incorrect") {
 				$("#grade").html(`
-					<h1>Bugger!</h1>
+					<h2>Bugger!</h2>
 					<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
 					`);
 		} else if(result === "unanswered"){
 			$("#grade").html(`
-					<h1>Pokey pants!</h1>
+					<h2>Pokey pants!</h2>
 					<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
 					`);
 		}
@@ -189,13 +232,14 @@ function wipeOut (){
 
 
 	function startQuiz(){
+		cardPosition = rando;
+		seconds = 10;
+		score = 0;
 		wipeOut();
 		$(this).hide();
 		$(".intro").hide();
 		$("#stop").show();
-		cardPosition = 0;
-		seconds = 10;
-		score = 0;
+		
 		renderQuestion();
 	}
 
@@ -207,7 +251,9 @@ function wipeOut (){
 	$("#start").click(startQuiz);//works. am happy
 
 	$("#choices").on("click", ".choiceBtn", function(e){
-		$('#timer').html('');
+		$('#timer').empty();
+		$("#cardHolder").empty();
+		$("#choices").empty();
 		userAnswer = $(this).data("key");
 
 		let answerPos = questions[cardPosition].ansPos;

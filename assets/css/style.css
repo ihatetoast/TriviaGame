@@ -6,15 +6,12 @@ html,
 body {
   height: 100%;
   padding: 0;
-  margin: 0;
-  /* The html and body elements cannot have any padding or margin. */ }
+  margin: 0; }
 
-#wrap {
+.wrap {
   min-height: 100%;
   height: auto;
-  /* Negative indent footer by its height */
   margin: 0 auto -30px;
-  /* Pad bottom by footer height */
   padding: 0 0 30px; }
 
 body {
@@ -25,20 +22,34 @@ li {
   list-style: none; }
 
 aside {
-  background-color: #FEFEFD;
-  border: 1px solid black; }
+  background-color: #FEFEFD; }
+  aside p {
+    font-size: 1.5em; }
+  @media screen and (min-width: 768px) {
+    aside {
+      margin: 1em 0.5em;
+      padding: 2em; } }
 
-section {
-  border: 1px solid black; }
+section p {
+  font-size: 1.2em; }
+@media screen and (min-width: 768px) {
+  section {
+    margin: 1em 0.5em;
+    padding: 2em; } }
 
 header {
   background-color: #6ED4D3;
-  border: 1px solid black; }
+  padding: 1em;
+  text-align: center; }
   header h1 {
-    font-size: 1.2em; }
+    font-size: 1.5em; }
+    @media screen and (min-width: 768px) {
+      header h1 {
+        font-size: 3em; } }
 
 footer {
   background-color: #93d2d0;
+  text-align: center;
   width: 100%;
   height: 30px; }
   footer p {
@@ -51,22 +62,42 @@ footer {
   font-size: 1.2em; }
 
 .choiceBtn {
-  width: 5em;
-  height: 5em;
-  border-radius: 50%;
+  width: 6em;
+  height: 6em;
+  border-radius: 25%;
   text-align: center;
   background-color: #F19997;
   color: white;
   display: inline-block;
   font-size: 1em;
+  margin: 1em;
   padding-top: 1.5em; }
   .choiceBtn:hover {
     background-color: #F5738D; }
 
 #start {
   background-color: #FFDB65;
-  color: #6ED4D3;
   border: 2px solid #45415A;
-  border-radius: 5px; }
+  border-radius: 5px;
+  color: #6ED4D3;
+  font-size: 2em;
+  margin: 0.5em 0em; }
+
+.questionCards {
+  padding: 0.25;
+  margin: 0.5em auto; }
+
+#cardHolder {
+  background-color: #F6E6DA; }
+  #cardHolder h2 {
+    margin: 2em; }
+
+.intro {
+  margin: 0.5em auto; }
+
+#grade {
+  background-color: #FEFEFD;
+  padding: 1em;
+  color: #45415A; }
 
 /*# sourceMappingURL=style.css.map */

@@ -14,14 +14,15 @@
 
 	<body>
 		<div class="wrap">
-			<div class="container">
-				<header class="row">
-					<h1>Critter Quizzer: Collective Nouns</h1>
-				</header>
+			<div class="container-fluid">
+				<div class="row">
+					<header class="col-sm-12">
+						<h1>Critter Quizzer: Collective Nouns</h1>
+					</header>
+				</div>
+				<div class="row">
 
-				<main class="row">
-
-				<aside class="col-sm-4 col-sm-push-8 time">
+				<aside class="col-sm-3 col-sm-push-8 time">
 					<p>No pressure, but you&apos;re being timed.</p>
 					<div id="timer">
 						<h2 class="asideH2">Time Remaining: 10 secs</h2>
@@ -29,29 +30,31 @@
 					<div id="grade"></div>
 				</aside>
 
-				<section class="col-sm-8 col-sm-pull-4 bulk">
+				<section class="col-sm-7 col-sm-offset-1 col-sm-pull-4 bulk">
 					<div class="row">
 						<div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 intro">
 							<p>What is a collective noun? It is a noun that is singular in form but represents a group. Collective nouns for animals can be amusing. Test your knowledge by taking the quiz below.</p>
 							<p>Press "Quiz me!" when ready.</p>
 						</div>
-						<div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 buttonsDiv">
+						<div class="col-xs-12 buttonsDiv">
 							<button class="btn btn-primary" id="start">Quiz me!</button> 
 						</div>
 					</div> <!-- end row -->
-					<div class="questonCards">
+					<div class="questionCards">
 						<div id="cardHolder"></div>
 						<div id="choices"></div>
 					</div>
 					
 				</section>
-			</main>
+			</div>
 			</div> <!-- end container for main content -->
 		</div> <!-- end wrap -->
 
 		<footer>
-			<div class="container">
-				<p>Katy Cassidy | ihatetoast</p>
+			<div class="container-fluid">
+				<div class="row">
+						<p>Katy Cassidy | ihatetoast</p>
+				</div>
 			</div>
 		</footer>
 
