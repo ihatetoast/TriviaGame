@@ -1,3 +1,5 @@
+//since pushing the last time for it being due, I have started to add more questions and randomize the start and letting the quiz go only 10 times.
+//i understand that this may have broken my code and i may not have it fixed before you see it.
 
 $(document).ready(function(){
 	
@@ -90,7 +92,7 @@ $(document).ready(function(){
 	},
 	{
 		species: "zebras",
-		options: [ "stripe", "dazzle", "clodding", "sleft"],
+		options: [ "stripe", "dazzle", "clodding", "schmiffen"],
 		ansPos: 1
 	},
 	{
@@ -103,13 +105,12 @@ $(document).ready(function(){
 const rando = Math.floor(Math.random() * ((questions.length) - 10));
 //i got vars out me arse:
 	let score = 0;
-	console.log(rando);
-	console.log(questions.length);
 	let userAnswer = null; 
 	let answer = null;
 	var quizTimer;
 	let seconds = 10;
 	let cardPosition;
+	let questionsAsked = 0;
 
 	//for extras
 	/*randomize questions if i get more than 10. get 10 random numbers
@@ -144,10 +145,10 @@ const rando = Math.floor(Math.random() * ((questions.length) - 10));
 	//function to pose questions. render to dom. count down starts. renders q
 	//sep question from buttons
 	function renderQuestion() {
-		if(questions[cardPosition]){
+		if(questions[cardPosition]) && (questionsAsked < 10){
 
-			$('#timer').html(`
-			<h2 class="asideH2">Time Remaining: <span> ${seconds} secs</span></h2>`);
+			// $('#timer').html(`
+			// <h2 class="asideH2">Time Remaining: <span> ${seconds} secs</span></h2>`);
 
 			$("#cardHolder").html(`
 				<h2 class="quizQuestion">What is the word for a group of ${questions[cardPosition].species}?</h2>`);
@@ -187,9 +188,11 @@ const rando = Math.floor(Math.random() * ((questions.length) - 10));
 
 function timer(){
 	seconds--;
+	$('#timer').html(`
+			<h2 class="asideH2">Time Remaining: <span> ${seconds} secs</span></h2>`);
 
 	if(seconds <= 0){
-		clearInterval(quizTimer);
+		stopTheMadness();
 		showMessage("unanswered");
 		$("#cardHolder").empty();
 		$("#choices").empty();
@@ -210,6 +213,9 @@ function timer(){
 		$("#cardHolder").empty();
 		$("#choices").empty();
 	};
+	function stopTheMadness(){
+		clearInterval(quizTimer);
+	}
 
 	function showMessage(result){
 		if(result === "correct"){
@@ -225,7 +231,7 @@ function timer(){
 		} else if(result === "unanswered"){
 			$("#grade").html(`
 					<h2>Pokey pants!</h2>
-					<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
+					<p>Answer was ${answer}. Score: ${score}/10</p>
 					`);
 		}
 	}
@@ -255,6 +261,7 @@ function timer(){
 		$("#cardHolder").empty();
 		$("#choices").empty();
 		userAnswer = $(this).data("key");
+		questionsAsked++;
 
 		let answerPos = questions[cardPosition].ansPos;
 		answer = questions[cardPosition].options[answerPos];
