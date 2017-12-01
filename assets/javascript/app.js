@@ -145,7 +145,7 @@ const rando = Math.floor(Math.random() * ((questions.length) - 10));
 	//function to pose questions. render to dom. count down starts. renders q
 	//sep question from buttons
 	function renderQuestion() {
-		if(questions[cardPosition]) && (questionsAsked < 10){
+		if((questions[cardPosition]) && (questionsAsked < 10)){
 
 			// $('#timer').html(`
 			// <h2 class="asideH2">Time Remaining: <span> ${seconds} secs</span></h2>`);
@@ -221,12 +221,12 @@ function timer(){
 		if(result === "correct"){
 				$("#grade").html(`
 					<h2>Huzzah!</h2>
-					<p>Score: ${score}/${questions.length}</p>
+					<p>Score: ${score}/10</p>
 					`);
 		} else if(result === "incorrect") {
 				$("#grade").html(`
 					<h2>Bugger!</h2>
-					<p>Answer was ${answer}. Score: ${score}/${questions.length}</p>
+					<p>Answer was ${answer}. Score: ${score}/10</p>
 					`);
 		} else if(result === "unanswered"){
 			$("#grade").html(`
@@ -262,6 +262,7 @@ function timer(){
 		$("#choices").empty();
 		userAnswer = $(this).data("key");
 		questionsAsked++;
+		console.log(questionsAsked);
 
 		let answerPos = questions[cardPosition].ansPos;
 		answer = questions[cardPosition].options[answerPos];
